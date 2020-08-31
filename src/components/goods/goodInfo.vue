@@ -20,7 +20,7 @@
             <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
               <span class="ball" v-if="isShow"></span>
             </transition>购买数量：
-            <numberbox></numberbox>
+            <numberbox :maxNumber="goodInfo.stock_quantity" ref="numberbox" :isShopCar="false"></numberbox>
           </p>
           <p>
             <mt-button type="primary" size="small">立即购买</mt-button>
@@ -92,6 +92,13 @@ export default {
     },
     addToShopCar() {
       this.isShow = !this.isShow;
+      const goodInfo = {
+        id: this.id >> 0,
+        price: parseFloat(this.goodInfo.sell_price),
+        count: this.$refs.numberbox.$refs.count.value,
+        selected: true,
+      };
+      this.$store.dispatch("addToCar", goodInfo);
     },
     beforeEnter(el) {
       el.style.transform = "translate(0,0)";

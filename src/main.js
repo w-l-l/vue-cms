@@ -7,6 +7,8 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 Vue.http.options.root = 'http://api.cms.liulongbin.top/api'
 Vue.http.options.emulateJSON = true
+//Vuex
+import store from './store'
 
 import App from './App.vue'
 //mui
@@ -28,21 +30,25 @@ import 'mint-ui/lib/style.css'
 //缩略图
 import VuePreview from 'vue-preview'
 Vue.use(VuePreview, {
-    mainClass: 'pswp--minimal--dark',
-    barsSize: {top: 0, bottom: 0},
-    captionEl: false,
-    fullscreenEl: false,
-    shareEl: false,
-    bgOpacity: 0.85,
-    tapToClose: true,
-    tapToToggleControls: false
-  })
+  mainClass: 'pswp--minimal--dark',
+  barsSize: {
+    top: 0,
+    bottom: 0
+  },
+  captionEl: false,
+  fullscreenEl: false,
+  shareEl: false,
+  bgOpacity: 0.85,
+  tapToClose: true,
+  tapToToggleControls: false
+})
 
 import moment from 'moment'
 Vue.filter('dateFormat', (date, format = 'YYYY-MM-DD HH:mm:ss') => moment(date).format(format))
 
 new Vue({
-    el: '#app',
-    render: c => c(App),
-    router
+  el: '#app',
+  render: c => c(App),
+  router,
+  store
 })

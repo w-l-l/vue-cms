@@ -15,7 +15,7 @@
       </router-link>
       <router-link class="mui-tab-item-llb" to="/shopcar">
         <span class="mui-icon mui-icon-extra mui-icon-extra-cart">
-          <span class="mui-badge" ref="badge">0</span>
+          <span class="mui-badge" ref="badge">{{ $store.getters.getCarAllCount }}</span>
         </span>
         <span class="mui-tab-label">购物车</span>
       </router-link>
@@ -46,7 +46,7 @@ export default {
   padding: 40px 0 50px 0;
   overflow-x: hidden;
   position: relative;
-  height: 100%;
+  min-height: 100%;
 }
 .v-enter {
   opacity: 0;
