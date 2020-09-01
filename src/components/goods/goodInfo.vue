@@ -95,7 +95,7 @@ export default {
       const goodInfo = {
         id: this.id >> 0,
         price: parseFloat(this.goodInfo.sell_price),
-        count: this.$refs.numberbox.$refs.count.value,
+        count: this.$refs.numberbox.$refs.count.value >> 0,
         selected: true,
       };
       this.$store.dispatch("addToCar", goodInfo);

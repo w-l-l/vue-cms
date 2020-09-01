@@ -1,6 +1,10 @@
 <template>
   <div class="content">
-    <mt-header fixed title="Vue-cms项目"></mt-header>
+    <mt-header fixed title="Vue-cms项目">
+      <span slot="left" @click="tabBack" v-if="isShow">
+        <mt-button icon="back">返回</mt-button>
+      </span>
+    </mt-header>
     <transition>
       <router-view :badge="badge"></router-view>
     </transition>
@@ -31,10 +35,22 @@ export default {
   data() {
     return {
       badge: null,
+      isShow: true,
     };
   },
   mounted() {
     this.badge = this.$refs.badge;
+    this.isShow = this.$route.path !== "/home"
+  },
+  methods: {
+    tabBack() {
+      this.$router.back();
+    },
+  },
+  watch: {
+    "$route.path": function (newValue) {
+      this.isShow = newValue !== "/home";
+    },
   },
 };
 </script>

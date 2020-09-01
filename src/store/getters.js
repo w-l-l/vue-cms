@@ -11,5 +11,19 @@ export default {
             }
         })
         return obj
+    },
+    getCarAccount(state) {
+        let count = 0
+        let totalPrice = 0
+        state.car.forEach(item => {
+            if (item.selected) {
+                count += item.count
+                totalPrice += item.price * item.count
+            }
+        })
+        return {
+            count,
+            totalPrice
+        }
     }
 }

@@ -1,17 +1,24 @@
 <template>
   <div class="shopcar-content">
     <div class="goods-list">
-      <div class="mui-card" v-for="item in shopCarList" :key="item.id">
+      <div class="mui-card" v-for="(item,index) in shopCarList" :key="item.id">
         <div class="mui-card-content">
           <div class="mui-card-content-inner">
-            <mt-switch v-model="getCarSelectCount[item.id].selected"></mt-switch>
-            <img :src="item.thumb_path" alt />
+            <mt-switch
+              v-model="getCarSelectCount[item.id].selected"
+              @change="updateShopCarSelected({id:item.id,selected:getCarSelectCount[item.id].selected})"
+            ></mt-switch>
+            <img :src="item.thumb_path" />
             <div class="info">
               <h1>{{ item.title }}</h1>
               <p class="inner">
                 <span class="price">￥{{ item.sell_price }}</span>
-                <numberbox :value="getCarSelectCount[item.id].count" :isShopCar="true" :goodsid="item.id"></numberbox>
-                <a href="#">删除</a>
+                <numberbox
+                  :value="getCarSelectCount[item.id].count"
+                  :isShopCar="true"
+                  :goodsid="item.id"
+                ></numberbox>
+                <a href="#" @click.prevent="delShopCarItem(item.id,index)">删除</a>
               </p>
             </div>
           </div>
@@ -20,7 +27,17 @@
     </div>
     <div class="mui-card">
       <div class="mui-card-content">
-        <div class="mui-card-content-inner">这是一个最简单的卡片视图控件；卡片视图常用来显示完整独立的一段信息，比如一篇文章的预览图、作者信息、点赞数量等</div>
+        <div class="mui-card-content-inner account">
+          <div class="left">
+            <p>总计（不含运费）</p>
+            <p>
+              已勾选商品
+              <span class="red">{{ getCarAccount.count }}</span> 件，总价
+              <span class="red">￥{{ getCarAccount.totalPrice }}</span>
+            </p>
+          </div>
+          <mt-button type="danger">去结算</mt-button>
+        </div>
       </div>
     </div>
   </div>
@@ -28,21 +45,22 @@
 <script>
 import numberbox from "../subcomponents/numberbox.vue";
 import { Toast } from "mint-ui";
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       shopCarList: null,
     };
   },
-  computed:{
-    ...mapGetters(['getCarSelectCount'])
+  computed: {
+    ...mapGetters(["getCarSelectCount", "getCarAccount"]),
   },
   components: { numberbox },
   created() {
     this.getShopCarList();
   },
   methods: {
+    ...mapActions(["updateShopCarSelected", "delShopCar"]),
     getShopCarList() {
       const ids = this.$store.state.car.reduce((ids, item) => {
         ids.push(item.id);
@@ -55,6 +73,10 @@ export default {
           ? (this.shopCarList = data.message)
           : Toast("购物车列表获取失败");
       });
+    },
+    delShopCarItem(id, index) {
+      this.shopCarList.splice(index, 1);
+      this.delShopCar(id);
     },
   },
 };
@@ -89,6 +111,18 @@ export default {
             height: 25px;
           }
         }
+      }
+    }
+  }
+  .account {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      .red {
+        color: red;
+        font-weight: bold;
+        font-size: 16px;
       }
     }
   }
